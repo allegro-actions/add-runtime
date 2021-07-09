@@ -1,0 +1,33 @@
+name: "add-runtime"
+description: "download deno runtime binaries"
+
+inputs:
+  version:
+    description: 'binary version [1.11.5]'
+    required: true
+  os:
+    description: 'operating system [linux-x64]'
+    required: true
+    default: 'linux-x64'
+  target:
+    description: 'path where to put binaries [runtime]'
+    required: false
+    default: 'runtime'
+
+runs:
+  using: composite
+  steps:
+    - name: deno linux64
+      shell: bash
+      run: |
+        wget -O deno.tar.xz "https://github.com/denoland/deno/releases/download/v$VERSION/deno-x86_64-unknown-linux-gnu.zip"
+        mkdir -p $TARGET
+        tar -xf deno.tar.xz --directory=$TARGET --strip-components=1
+        rm deno.tar.xz
+      env:
+        VERSION: ${{ inputs.version }}
+        TARGET: ${{ inputs.target }}
+
+branding:
+  icon: refresh-cw
+  color: green
