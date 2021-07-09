@@ -1,0 +1,46 @@
+name: "add-runtime"
+description: "download runtime binaries"
+
+inputs:
+  runtime:
+    description: 'runtime [node|deno]'
+    required: true
+  version:
+    description: 'binary version [16.0.0]'
+    required: true
+  os:
+    description: 'operating system [linux-x64]'
+    required: true
+    default: 'linux-x64'
+  target:
+    description: 'path where to put binaries [runtime]'
+    required: false
+    default: 'runtime'
+
+runs:
+  using: composite
+  steps:
+    - name: node linux64
+      if: ${{ inputs.runtime == 'node' && inputs.os == 'linux-x64' }}
+      shell: bash
+      run: |
+        wget -O node.tar.xz "https://nodejs.org/dist/v$VERSION/node-v$VERSION-linux-x64.tar.xz"
+        mkdir -p $TARGET
+        tar -xf node.tar.xz --directory=$TARGET --strip-components=1
+      env:
+        VERSION: ${{ inputs.version }}
+        TARGET: ${{ inputs.target }}
+    - name: deno linux64
+      if: ${{ inputs.runtime == 'deno' && inputs.os == 'linux-x64' }}
+      shell: bash
+      run: |
+        wget -O deno.tar.xz "https://github.com/denoland/deno/releases/download/v$VERSION/deno-x86_64-unknown-linux-gnu.zip"
+        mkdir -p $TARGET
+        tar -xf deno.tar.xz --directory=$TARGET --strip-components=1
+      env:
+        VERSION: ${{ inputs.version }}
+        TARGET: ${{ inputs.target }}
+
+branding:
+  icon: refresh-cw
+  color: green
