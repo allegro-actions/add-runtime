@@ -20,7 +20,7 @@ runs:
     - name: node linux64
       shell: bash
       run: |
-        wget -O node.tar.xz "https://nodejs.org/dist/v$VERSION/node-v$VERSION-linux-x64.tar.xz"
+        wget -O node.tar.xz "https://nodejs.org/dist/v$VERSION/node-v$VERSION-linux-x64.tar.xz?latest=true"
         mkdir -p $TARGET
         tar -xf node.tar.xz --directory=$TARGET --strip-components=1
         rm node.tar.xz
