@@ -17,15 +17,27 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: node linux64
+    - id: cache-node
+      uses: actions/cache@v3
+      with:
+        path: node.tar.xz
+        key: node-${{ inputs.os }}-${{ inputs.version }}
+    
+    - name: download node ${{ inputs.os }}
+      if: ${{ steps.cache-node.outputs.cache-hit != 'true' }}
       shell: bash
       run: |
-        wget -O node.tar.xz "https://nodejs.org/dist/v$VERSION/node-v$VERSION-linux-x64.tar.xz?latest=true"
-        mkdir -p $TARGET
-        tar -xf node.tar.xz --directory=$TARGET --strip-components=1
-        rm node.tar.xz
+        wget --retry-connrefused --waitretry=1 --read-timeout=20 --timeout=15 -t 5 -O node.tar.xz "https://nodejs.org/dist/v$VERSION/node-v$VERSION-$OS.tar.xz"
       env:
         VERSION: ${{ inputs.version }}
+        OS: ${{ inputs.os }}
+    
+    - name: unzip
+      shell: bash
+      run: |
+        mkdir -p $TARGET
+        tar -xf node.tar.xz --directory=$TARGET --strip-components=1
+      env:
         TARGET: ${{ inputs.target }}
 
 branding:
