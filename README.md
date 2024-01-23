@@ -41,7 +41,7 @@ When you're combining your sourcecode with runtime binaries to be later executed
 
 ```yaml
 steps:
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v4
 
   - name: download node to "runtime" directory
     uses: allegro-actions/add-runtime/node@v1
