@@ -20,10 +20,10 @@ runs:
     - name: deno linux64
       shell: bash
       run: |
-        wget -O deno.tar.xz "https://github.com/denoland/deno/releases/download/v$VERSION/deno-x86_64-unknown-linux-gnu.zip"
+        wget -O deno.zip "https://github.com/denoland/deno/releases/download/v$VERSION/deno-x86_64-unknown-linux-gnu.zip"
         mkdir -p $TARGET
-        tar -xf deno.tar.xz --directory=$TARGET --strip-components=1
-        rm deno.tar.xz
+        unzip deno.zip -d $TARGET
+        rm deno.zip
       env:
         VERSION: ${{ inputs.version }}
         TARGET: ${{ inputs.target }}
